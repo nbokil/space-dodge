@@ -158,13 +158,19 @@ $(document).ready(function() {
 		}
 	}
 
+	var gameplay; //initialize global variable that will be the interval
+
 	function end_game() {
 		clearInterval(gameplay);
-		$('#mturk_form').submit();
+		$('#mturk_form').submit(); //submit the results to mturk
 		alert("Thanks for playing! Your results have been submitted to us and you will receive payment shortly. Have a great day!");
 	}
+
+	function start_game() {
+		gameplay = setInterval(animate_board, 1000);
+	}
 	
-	var gameplay = setInterval(animate_board, 1000);
+	
 
 //--------------------mturk.js code below --------------------------------------------------------------
 	/**
@@ -199,6 +205,9 @@ $(document).ready(function() {
     // If the HIT hasn't been accepted yet, disabled the form fields.
     if(aid == "ASSIGNMENT_ID_NOT_AVAILABLE") {
 	    $('input,textarea,select').attr("DISABLED", "disabled");
+    }
+    else {
+    	start_game(); //start game only if HIT has been accepted
     }
 
     // Add a new hidden input element with name="assignmentId" 
