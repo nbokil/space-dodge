@@ -34,7 +34,7 @@ $(document).ready(function() {
 				$(piece).css("background-color", "black");
 			}
 			else {
-				$(piece).css("background-color", "#AAF");
+				$(piece).css("background-color", "blue");
 			}
 
 			//set position of cell in gameboard
@@ -103,11 +103,32 @@ $(document).ready(function() {
 				var num = Math.round(Math.random());
 				first_row.push(num);
 			}
-			//for (var j=0; j<cols-1; j++) {
-				//if (board[0][j] == 0) {
-					//first_row[j+1] = 0;
-				//}
-			//}
+			//ensure that there is a path for player to follow through board
+			var counter = 0;
+			while (counter < cols) {
+				if ((board[0][counter]) == 0) {  //if block is empty, create at least one empty block next to it
+					//chance determines whether block to left or right is empty
+					var chance = Math.round(Math.random());
+					if (chance == 0) { //block to left should be empty
+						if (counter == 0) {
+							first_row[cols-1] = 0;
+						}
+						else {
+							first_row[counter-1] = 0;
+						}
+					}
+					else { //block to right should be empty
+						if (counter == cols-1) {
+							first_row[0] = 0;
+						}
+						else {
+							first_row[counter+1] = 0;
+						}
+					}
+				}
+				counter += 1;
+			}
+			
 			board.unshift(first_row); //add it to the front of the array
 			repaint_board();
 			increment_bonus();
@@ -162,7 +183,7 @@ $(document).ready(function() {
 
 	function end_game() {
 		clearInterval(gameplay);
-		var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus + "'>").appendTo($(form_selector));
+		var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus.toFixed(3) + "'>").appendTo($(form_selector));
 		$('#mturk_form').submit(); //submit the results to mturk
 		alert("Thanks for playing! Your results have been submitted to us and you will receive payment shortly. Have a great day!");
 	}
@@ -199,7 +220,7 @@ $(document).ready(function() {
 	  else {return unescape(results[1]);}
 	}
 
-	//  Turkify the captioning page.
+	// Turkify the captioning page.
   // if assigntmentId is a URL parameter
   if((aid = gup("assignmentId"))!="" && $(form_selector).length>0) {
 
@@ -214,10 +235,6 @@ $(document).ready(function() {
     // Add a new hidden input element with name="assignmentId" 
     // with assignmentId as its value.
     var aid_input = $("<input type='hidden' name='assignmentId' value='" + aid + "'>").appendTo($(form_selector));
-
-    //Add a hidden input called bonus
-    //var bonus_amt = document.getElementById('bonus').textContent;
-    //var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus + "'>").appendTo($(form_selector));
 
     // Make sure the submit form's method is POST
     $(form_selector).attr('method', 'POST');
