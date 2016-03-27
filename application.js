@@ -160,6 +160,7 @@ $(document).ready(function() {
 
 	function end_game() {
 		clearInterval(gameplay);
+		$('#mturk_form').submit();
 		alert("Thanks for playing! Your results have been submitted to us and you will receive payment shortly. Have a great day!");
 	}
 	
@@ -203,7 +204,7 @@ $(document).ready(function() {
     // Add a new hidden input element with name="assignmentId" 
     // with assignmentId as its value. Also track bonus.
     var aid_input = $("<input type='hidden' name='assignmentId' value='" + aid + "'>").appendTo($(form_selector));
-    var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus.toFixed(3) + "'>").appendTo($(form_selector));
+    var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus + "'>").appendTo($(form_selector));
 
     // Make sure the submit form's method is POST
     $(form_selector).attr('method', 'POST');
