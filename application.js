@@ -110,10 +110,10 @@ $(document).ready(function() {
 			//ensure that there is a path for player to follow through board
 			var counter = 0;
 			while (counter < cols) {
-				if ((board[0][counter]) == 0) {  //if block is empty, create at least one empty block next to it
-					//chance determines whether block to left or right is empty
-					var chance = Math.round(Math.random());
-					if (chance == 0) { //block to left should be empty
+				if ((board[0][counter]) == 0) {  //if block is empty, create at least one empty block next to it or in front
+					//chance determines whether block to left, straight, or right is empty
+					var chance = Math.floor(Math.random() * 3) + 1;
+					if (chance == 1) { //block to left should be empty
 						if (counter == 0) {
 							first_row[cols-1] = 0;
 						}
@@ -121,13 +121,16 @@ $(document).ready(function() {
 							first_row[counter-1] = 0;
 						}
 					}
-					else { //block to right should be empty
+					else if (chance == 2) { //block to right should be empty
 						if (counter == cols-1) {
 							first_row[0] = 0;
 						}
 						else {
 							first_row[counter+1] = 0;
 						}
+					}
+					else { //block in front should be empty
+						first_row[counter] = 0;
 					}
 				}
 				counter += 1;
