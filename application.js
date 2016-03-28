@@ -34,7 +34,7 @@ $(document).ready(function() {
 				$(piece).css("background-color", "black");
 			}
 			else {
-				$(piece).css("background-color", "blue");
+				$(piece).css("background-color", "orange");
 			}
 
 			//set position of cell in gameboard
@@ -63,9 +63,12 @@ $(document).ready(function() {
 
 //---------------Animation and Gameplay-------------------------------------------------
 	
+	var keystrokes = 0; //create counter for keystrokes that will detect cheaters
+
 	//Move the piece on bottom row when left and right arrow keys are clicked
 	$(document).keydown(function(e) {
 	  if(e.keyCode==37) {
+	  	keystrokes += 1;
 	    // left arrow clicked
 	    if (player_col == 0) {
 	    	player_col = cols-1;
@@ -76,6 +79,7 @@ $(document).ready(function() {
 	    $(player).css("left", player_col*cell_size);
 	  }
 	  else if(e.keyCode == 39) {
+	  	keystrokes += 1;
 	    // right arrow clicked
 	    if (player_col == (cols-1)) {
 	    	player_col = 0;
@@ -106,10 +110,10 @@ $(document).ready(function() {
 			//ensure that there is a path for player to follow through board
 			var counter = 0;
 			while (counter < cols) {
-				if ((board[0][counter]) == 0) {  //if block is empty, create at least one empty block next to it
-					//chance determines whether block to left or right is empty
-					var chance = Math.round(Math.random());
-					if (chance == 0) { //block to left should be empty
+				if ((board[0][counter]) == 0) {  //if block is empty, create at least one empty block next to it or in front
+					//chance determines whether block to left, straight, or right is empty
+					var chance = Math.floor(Math.random() * 3) + 1;
+					if (chance == 1) { //block to left should be empty
 						if (counter == 0) {
 							first_row[cols-1] = 0;
 						}
@@ -117,13 +121,16 @@ $(document).ready(function() {
 							first_row[counter-1] = 0;
 						}
 					}
-					else { //block to right should be empty
+					else if (chance ==2) { //block to right should be empty
 						if (counter == cols-1) {
 							first_row[0] = 0;
 						}
 						else {
 							first_row[counter+1] = 0;
 						}
+					}
+					else { //block in front should be empty
+						first_row[counter] = 0;
 					}
 				}
 				counter += 1;
@@ -148,7 +155,7 @@ $(document).ready(function() {
 					$(piece).css("background-color", "black");
 				}
 				else {
-					$(piece).css("background-color", "blue");
+					$(piece).css("background-color", "orange");
 				}
 			}
 		}			
@@ -184,6 +191,7 @@ $(document).ready(function() {
 	function end_game() {
 		clearInterval(gameplay);
 		var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus.toFixed(3) + "'>").appendTo($(form_selector));
+		var keystrokes_input = $("<input type='hidden' name='keystrokes' value='" + keystrokes + "'>").appendTo($(form_selector));
 		$('#mturk_form').submit(); //submit the results to mturk
 		alert("Thanks for playing! Your results have been submitted to us and you will receive payment shortly. Have a great day!");
 	}
