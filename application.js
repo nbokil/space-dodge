@@ -5,7 +5,7 @@ $(document).ready(function() {
 	var rows = 7;
 	var cols = 6;
 	var board = [];
-	var bonus = 0.000;
+	var bonus = 0.00;
 	for (var i=0; i<rows; i++) {
 		board.push([]);
 		for (var j=0; j<cols; j++) {
@@ -175,12 +175,12 @@ $(document).ready(function() {
 	function increment_bonus() {
 		//increment the bonus every second that the player doesn't collide
 		//if bonus has reached $2.00 (max), end the game
-		if (bonus == 2.000) {
+		if (bonus == 2.00) {
 			end_game();
 		}
 		else {
-			bonus += 0.001;
-			bonus_text = bonus.toFixed(3);
+			bonus += 0.01;
+			bonus_text = bonus.toFixed(2);
 			var bonus_field = document.getElementById("bonus");
 			$(bonus_field).text("$"+bonus_text);
 		}
@@ -190,7 +190,7 @@ $(document).ready(function() {
 
 	function end_game() {
 		clearInterval(gameplay);
-		var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus.toFixed(3) + "'>").appendTo($(form_selector));
+		var bonus_input = $("<input type='hidden' name='bonus' value='" + bonus.toFixed(2) + "'>").appendTo($(form_selector));
 		var keystrokes_input = $("<input type='hidden' name='keystrokes' value='" + keystrokes + "'>").appendTo($(form_selector));
 		$('#mturk_form').submit(); //submit the results to mturk
 		alert("Thanks for playing! Your results have been submitted to us and you will receive payment shortly. Have a great day!");
